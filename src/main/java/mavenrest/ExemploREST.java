@@ -5,19 +5,27 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 @Path("exemplo")
 public class ExemploREST {
 
     @POST
     @Path("post")
+    @FiltroSelecionadoAnotacao
     public String post(String parametro1) {
         return "{\"retorno\":\"" + parametro1 + "\"}";
     }
@@ -150,4 +158,28 @@ public class ExemploREST {
         us.add(new User("Fulano", "f.beltrano@gmail.com", "topsecret"));
         return us;
     }
+
+    /*
+     * podemos injetar informacoes da requisicao
+     * para nao estarem disponiveis em todos os metodos, esses atributos podem ser colocados como parametros
+     */
+    @Context
+    UriInfo uriInfo;
+    @Context
+    Request request;
+    @Context
+    HttpHeaders headers;
+
+    @GET
+    @Path("get")
+    @FiltroSelecionadoAnotacao
+    public Response get() {
+        HashMap<String, String> m = new HashMap<>();
+        m.put("absolutePath", uriInfo.getAbsolutePath().toString());
+        m.put("method", request.getMethod());
+        m.put("Host", headers.getHeaderString("Host"));
+        /* o metodo ok gera uma resposta com status 200 e recebe como parametro um objeto que sera anexado ao corpo da resposta */
+        return Response.ok(m).build();
+    }
+
 }
