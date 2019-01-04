@@ -1,5 +1,7 @@
-package mavenrest;
+package mavenrest.user;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,8 +21,12 @@ public class UserDAO {
         return em.find(User.class, id);
     }
 
+    public User getUserByEmail(String email) {
+        return (User) em.createQuery("SELECT u from User u WHERE u.email = ?1").setParameter(1, email).getSingleResult();
+    }
+
     @Transactional
-    public void createUser(String nome, String email, String senha) {
+    public void createUser(String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
         User user = new User(nome, email, senha);
         em.persist(user);
     }
@@ -42,10 +48,12 @@ public class UserDAO {
     }
 
     @Transactional
-    public void updateUser(long id, String nome, String email, String senha) {
+    public void updateUser(long id, String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
         User u = em.find(User.class, id);
         u.setEmail(email);
         u.setNome(nome);
-        u.setSenha(senha);
+        if (senha != null && !"".equals(senha)) {
+            u.setSenha(senha);//so atualiza a senha se foi modificada
+        }
     }
 }

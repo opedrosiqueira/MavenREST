@@ -1,4 +1,4 @@
-package mavenrest;
+package mavenrest.exemplo;
 
 import java.io.IOException;
 import javax.annotation.Priority;

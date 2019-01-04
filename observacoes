@@ -1,0 +1,4 @@
+Princípios
+* forma correta de salvar senhas no banco: com hash e salt (https://crackstation.net/hashing-security.htm)
+* API REST não persiste estado (idealmente totalmente stateless) (https://stackoverflow.com/questions/17000835/token-authentication-vs-cookies/35059874#35059874)
+** boa forma de manter stateless: token authentication. uma biblioteca JWT gera um token autodescritivo que pode ser usado para autenticacao stateless (https://stackoverflow.com/questions/26777083/best-practice-for-rest-token-based-authentication-with-jax-rs-and-jersey)

@@ -1,11 +1,15 @@
-package mavenrest;
+package mavenrest.user;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import static mavenrest.autenticacao.AutenticacaoHash.gerarHash;
+import static mavenrest.autenticacao.AutenticacaoHash.gerarSaltAleatorio;
 
 @Entity
 public class User {
@@ -19,19 +23,20 @@ public class User {
 
     @Column(unique = true)
     @NotEmpty
-    @Email(message = "Email should be valid")
+    @Email(message = "Email deve ser valido")
     private String email;
 
-    @NotEmpty(message = "Senha nao pode estar vazia")
     private String senha;
+
+    private String salt;
 
     public User() {
     }
 
-    public User(String nome, String email, String password) {
+    public User(String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.nome = nome;
         this.email = email;
-        this.senha = password;
+        this.setSenha(senha);
     }
 
     public long getId() {
@@ -62,8 +67,17 @@ public class User {
         return senha;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSenha(String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        this.salt = gerarSaltAleatorio();
+        this.senha = gerarHash(senha, salt);
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
 }

@@ -1,4 +1,4 @@
-package mavenrest;
+package mavenrest.user;
 
 import java.util.List;
 import javax.inject.Inject;

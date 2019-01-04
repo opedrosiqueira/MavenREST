@@ -44,7 +44,6 @@ function editar(u) {
         $("#id").val(u.id);
         $("#nome").val(u.nome);
         $("#email").val(u.email);
-        $("#senha").val(u.senha);
         $("#acao").html("Editar");
         $("#acao").attr("onclick", "criar_editar('/MavenREST/rest/users/" + $("#id").val() + "','PUT');");
     });

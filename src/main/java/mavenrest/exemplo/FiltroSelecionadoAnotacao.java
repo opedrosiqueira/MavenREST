@@ -1,4 +1,4 @@
-package mavenrest;
+package mavenrest.exemplo;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
