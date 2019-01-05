@@ -1,6 +1,7 @@
 package mavenrest.user;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,7 @@ import static mavenrest.autenticacao.AutenticacaoHash.gerarHash;
 import static mavenrest.autenticacao.AutenticacaoHash.gerarSaltAleatorio;
 
 @Entity
-public class User {
+public class User implements Principal {
 
     @Id
     @GeneratedValue
@@ -80,4 +81,12 @@ public class User {
         this.salt = salt;
     }
 
+    @Override
+    public String getName() {
+        return getEmail();
+    }
+
+    public String toString() {
+        return this.getNome() + ", " + this.getEmail();
+    }
 }

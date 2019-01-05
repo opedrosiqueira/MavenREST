@@ -15,7 +15,6 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @FiltroSelecionadoAnotacao
 @Priority(Priorities.AUTHORIZATION)
-
 public class FiltroSelecionado implements ContainerRequestFilter {
 
     @Override

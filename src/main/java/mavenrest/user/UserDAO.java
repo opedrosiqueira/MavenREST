@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
@@ -22,7 +23,11 @@ public class UserDAO {
     }
 
     public User getUserByEmail(String email) {
-        return (User) em.createQuery("SELECT u from User u WHERE u.email = ?1").setParameter(1, email).getSingleResult();
+        try {
+            return (User) em.createQuery("SELECT u from User u WHERE u.email = ?1").setParameter(1, email).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Transactional
