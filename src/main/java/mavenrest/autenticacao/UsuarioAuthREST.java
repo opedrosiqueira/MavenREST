@@ -1,7 +1,7 @@
 package mavenrest.autenticacao;
 
-import io.jsonwebtoken.Jwts;
-import java.util.Date;
+import authrest.AutenticacaoToken;
+import authrest.Autenticado;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -10,40 +10,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import mavenrest.auth.AutenticacaoHash;
-import mavenrest.auth.AutenticacaoPropriedades;
-import mavenrest.auth.Autenticado;
-import mavenrest.user.User;
-import mavenrest.user.UserDAO;
 
 @Path("auth")
 public class UsuarioAuthREST {
 
     @Inject
-    UserDAO userDAO;
-
-    @Inject
-    AutenticacaoPropriedades ap;
+    AutenticacaoToken at;
 
     @POST
     public Response loginUser(
             @FormParam("email") String email,
             @FormParam("senha") String senha) {
-        User u = userDAO.getUserByEmail(email);
-        if (u == null || !AutenticacaoHash.igual(senha, u.getSalt(), u.getPassword())) {
-            return Response.status(Response.Status.FORBIDDEN).entity("usuario ou senha invalida").build();
-        }
-        //parei aqui: criar uma funcao que devolve o token dentro da api Auth
-        Date dateIssued = new Date();
-        Date dateExpires = new Date(dateIssued.getTime() + ap.getExpiresAfter());
-        String token = Jwts.builder()
-                .setIssuer(ap.getIssuer())
-                .setSubject(u.getEmail())
-                .setIssuedAt(dateIssued)
-                .setExpiration(dateExpires)
-                .signWith(ap.getKey())
-                .compact();
-
+        String token = at.getToken(email, senha);
         return Response.ok(token).build();
     }
 

@@ -1,5 +1,7 @@
 package mavenrest.user;
 
+import authrest.AutenticacaoDAO;
+import authrest.AutenticacaoUser;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -9,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-public class UserDAO {
+public class UserDAO implements AutenticacaoDAO {
 
     @PersistenceContext
     EntityManager em;
@@ -60,5 +62,10 @@ public class UserDAO {
         if (senha != null && !"".equals(senha)) {
             u.setPassword(senha);//so atualiza a senha se foi modificada
         }
+    }
+
+    @Override
+    public AutenticacaoUser getSubject(String subject) {
+        return this.getUserByEmail(subject);
     }
 }
