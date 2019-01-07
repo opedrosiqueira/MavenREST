@@ -1,4 +1,4 @@
-package mavenrest.autenticacao;
+package mavenrest.auth;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;

@@ -1,13 +1,9 @@
-package mavenrest.autenticacao;
+package mavenrest.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.Base64;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.ws.rs.Priorities;
@@ -18,20 +14,14 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-import mavenrest.AppPropriedades;
-import mavenrest.user.User;
-import mavenrest.user.UserDAO;
 
 @Autenticado
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AutenticacaoFiltro implements ContainerRequestFilter {
+public abstract class AutenticacaoFiltro implements ContainerRequestFilter {
 
     @Inject
-    UserDAO userDAO;
-
-    @Inject
-    AppPropriedades ap;
+    AutenticacaoPropriedades ap;
 
     @Context
     private ResourceInfo ri;
@@ -44,18 +34,23 @@ public class AutenticacaoFiltro implements ContainerRequestFilter {
             return;
         }
         token = token.substring(7);
-        Key key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(ap.getSecret()));
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token);
-            User u = userDAO.getUserByEmail(claims.getBody().getSubject());
+            Jws<Claims> claims = Jwts.parser().setSigningKey(ap.getKey()).parseClaimsJws(token);
+            AutenticacaoUser u = getUser(claims.getBody().getSubject());
             boolean isSecure = "https".equalsIgnoreCase(req.getUriInfo().getRequestUri().getScheme());
-            req.setSecurityContext(new AutenticacaoContext(u, isSecure, "Bearer"));
-            //parei aqui: nao permitir se nao for autorizado
-            System.out.println(Arrays.toString(ri.getResourceMethod().getAnnotation(Autenticado.class).value()));
-
+            AutenticacaoContext seq = new AutenticacaoContext(u, isSecure, "Bearer");
+            req.setSecurityContext(seq);
+            for (String role : ri.getResourceMethod().getAnnotation(Autenticado.class).value()) {
+                if (seq.isUserInRole(role) || role == null || role.isEmpty()) {
+                    return;
+                }
+            }
+            req.abortWith(Response.status(Response.Status.FORBIDDEN).entity("Sem permissão").build());
         } catch (JwtException e) {
             req.abortWith(Response.status(Response.Status.FORBIDDEN).entity(e.getMessage()).build());
         }
     }
+
+    public abstract AutenticacaoUser getUser(String subject);
 
 }

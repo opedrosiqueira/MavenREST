@@ -14,15 +14,25 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.Providers;
 
 @Path("exemplo")
 public class ExemploREST {
 
+    /*
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/post' -d 'uma string'
+     */
     @POST
     @Path("post")
     @FiltroSelecionadoAnotacao
@@ -35,6 +45,8 @@ public class ExemploREST {
       Host: localhost:8080
       param1: Um Texto
       param2: 123
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postHeaderParam' -H 'param1: uma string' -H 'param2: 123'
      */
     @POST
     @Path("postHeaderParam")
@@ -49,6 +61,8 @@ public class ExemploREST {
       Host: localhost:8080
       Content-Type: application/x-www-form-urlencoded
       nome=Henrique&email=henrique@gmail.com&senha=fdsa
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postFormParam' -H 'Content-Type: application/x-www-form-urlencoded' -d 'nome=Henrique&email=henrique@gmail.com&senha=fdsa'
      */
     @POST
     @Path("postFormParam")
@@ -63,6 +77,8 @@ public class ExemploREST {
     /*
       POST /MavenREST/rest/exemplo/postQueryParam?nome=hello&email=world&senha=fdsa HTTP/1.1
       Host: localhost:8080
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postQueryParam?nome=hello&email=world&senha=fdsa'
      */
     @POST
     @Path("postQueryParam")
@@ -77,6 +93,8 @@ public class ExemploREST {
     /*
       POST /MavenREST/rest/exemplo/postPathParam/pedro/p@gmail.com/topsecret HTTP/1.1
       Host: localhost:8080
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postPathParam/Pedro/pedro@gmail.com/asdf'
      */
     @POST
     @Path("/postPathParam/{nome}/{email}/{senha}")
@@ -93,6 +111,8 @@ public class ExemploREST {
       Host: localhost:8080
       Content-Type: application/json
       {"nome":"pedro","email":"pedro@gmail", "senha":"topsecret"}
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postJSONParam' -H 'Content-Type: application/json' -d '{"nome":"pedro","email":"pedro@gmail", "senha":"topsecret"}'
      */
     @POST
     @Path("/postJSONParam")
@@ -108,15 +128,17 @@ public class ExemploREST {
       POST /MavenREST/rest/exemplo/postJSONParam2 HTTP/1.1
       Host: localhost:8080
       {"nome":"pedro","email":"pedro@gmail", "senha":"topsecret"}
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postJSONParam2' -d '{"nome":"pedro","email":"pedro@gmail", "senha":"topsecret"}'
      */
     @POST
     @Path("/postJSONParam2")
     public User postJSONParam2(String jsonString) throws IOException {
         //converte JSON para POJO
         User u = new ObjectMapper().readValue(jsonString, User.class);
-        u.setNome(u.getNome() + "*alterado*");
-        u.setSenha(u.getSenha() + "*modificado*");
-        u.setEmail(u.getEmail() + "*mudado*");
+        u.setNome(u.getNome() + "*mudado*");
+        u.setSenha(u.getSenha() + "*alterado*");
+        u.setEmail(u.getEmail() + "*modificado*");
         return u;
     }
 
@@ -124,9 +146,9 @@ public class ExemploREST {
       POST /MavenREST/rest/exemplo/postListJSON HTTP/1.1
       Host: localhost:8080
       Content-Type: application/json
-      [{"nome":"Pedro","email":"pedro@gmail",
-      "senha":"topsecret"},{"nome":"Henrique","email":"henrique@hotmail",
-      "senha":"confidencial"}]
+      [{"nome":"Pedro","email":"pedro@gmail", "senha":"topsecret"},{"nome":"Henrique","email":"henrique@hotmail", "senha":"confidencial"}]
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postListJSON' -H 'Content-Type: application/json' -d '[{"nome":"Pedro","email":"pedro@gmail", "senha":"topsecret"},{"nome":"Henrique","email":"henrique@hotmail", "senha":"confidencial"}]'
      */
     @POST
     @Path("/postListJSON")
@@ -144,6 +166,8 @@ public class ExemploREST {
       [{"nome":"Pedro","email":"pedro@gmail",
       "senha":"topsecret"},{"nome":"Henrique","email":"henrique@hotmail",
       "senha":"confidencial"}]
+    
+    curl -X POST 'http://localhost:8080/MavenREST/rest/exemplo/postListJSON2' -d '[{"nome":"Pedro","email":"pedro@gmail", "senha":"topsecret"},{"nome":"Henrique","email":"henrique@hotmail", "senha":"confidencial"}]'
      */
     @POST
     @Path("/postListJSON2")
@@ -160,24 +184,46 @@ public class ExemploREST {
     }
 
     /*
-     * podemos injetar informacoes da requisicao
-     * para nao estarem disponiveis em todos os metodos, esses atributos podem ser colocados como parametros
+     * podemos injetar informacoes de requisicao e resposta com a anotacao @Context.
+     * podemos injetar em parametros, atributos e ate em metodos
      */
     @Context
-    UriInfo uriInfo;
+    Application app;
+    @Context
+    Configuration config;
+    @Context
+    HttpHeaders headers;
+    @Context
+    Providers providers;
     @Context
     Request request;
     @Context
-    HttpHeaders headers;
+    ResourceContext resourceContext;
+    @Context
+    ResourceInfo resourceInfo;
+    @Context
+    SecurityContext securityContext;
+    @Context
+    UriInfo uriInfo;
 
+    /*
+    curl -X GET 'http://localhost:8080/MavenREST/rest/exemplo/get'
+     */
     @GET
     @Path("get")
     @FiltroSelecionadoAnotacao
     public Response get() {
         HashMap<String, String> m = new HashMap<>();
-        m.put("absolutePath", uriInfo.getAbsolutePath().toString());
-        m.put("method", request.getMethod());
-        m.put("Host", headers.getHeaderString("Host"));
+        m.put("app.properties", app.getProperties().toString());
+        m.put("config.properties", config.getProperties().toString());
+        m.put("headers.host", headers.getHeaderString("Host"));
+        m.put("providers.context", providers.getContextResolver(User.class, MediaType.WILDCARD_TYPE).getContext(User.class).toString());
+        m.put("request.method", request.getMethod());
+        m.put("resourceContext.resource", resourceContext.getResource(ExemploREST.class).post("ola como vai"));
+        m.put("resourceInfo.resourceMethod", resourceInfo.getResourceMethod().getName());
+        m.put("securityContext.authenticationScheme", securityContext.getAuthenticationScheme());
+        m.put("uriInfo.absolutePath", uriInfo.getAbsolutePath().toString());
+
         /* o metodo ok gera uma resposta com status 200 e recebe como parametro um objeto que sera anexado ao corpo da resposta */
         return Response.ok(m).build();
     }

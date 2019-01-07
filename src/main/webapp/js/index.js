@@ -15,7 +15,7 @@ function buscar() {
 function exibirResultado(data) {
     let lista = "<table><tr><th>ID</th><th>Nome</th><th>Email</th><th>Opções</th></tr>";
     for (let d of data) {
-        lista += "<tr><td>" + d.id + "</td><td>" + d.nome + "</td><td>" + d.email + "</td><td><button onclick='editar(" + JSON.stringify(d) + ");'>Editar</button><button onclick=\"remover(" + d.id + ")\">Apagar</button></td></tr>";
+        lista += "<tr><td>" + d.id + "</td><td>" + d.name + "</td><td>" + d.email + "</td><td><button onclick='editar(" + JSON.stringify(d) + ");'>Editar</button><button onclick=\"remover(" + d.id + ")\">Apagar</button></td></tr>";
     }
     lista += "</table>";
     $("#conteudo").html(lista);
@@ -42,7 +42,7 @@ function criar() {
 function editar(u) {
     $("#conteudo").load("form.html", function () {
         $("#id").val(u.id);
-        $("#nome").val(u.nome);
+        $("#nome").val(u.name);
         $("#email").val(u.email);
         $("#acao").html("Editar");
         $("#acao").attr("onclick", "criar_editar('/MavenREST/rest/users/" + $("#id").val() + "','PUT');");

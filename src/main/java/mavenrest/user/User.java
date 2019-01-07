@@ -1,59 +1,30 @@
 package mavenrest.user;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.Principal;
 import java.security.spec.InvalidKeySpecException;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import static mavenrest.autenticacao.AutenticacaoHash.gerarHash;
-import static mavenrest.autenticacao.AutenticacaoHash.gerarSaltAleatorio;
+import mavenrest.auth.AutenticacaoUser;
 
 @Entity
-public class User implements Principal {
+public class User extends AutenticacaoUser {
 
-    @Id
-    @GeneratedValue
-    private long id;
-
-    @NotEmpty(message = "Nome nao pode estar vazio")
-    private String nome;
-
-    @Column(unique = true)
-    @NotEmpty
+    @Column(unique = true, nullable = false)
     @Email(message = "Email deve ser valido")
     private String email;
-
-    private String senha;
-
-    private String salt;
 
     public User() {
     }
 
-    public User(String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.nome = nome;
+    public User(String name, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        super(name, senha);
         this.email = email;
-        this.setSenha(senha);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
+    public User(String name, String email, String senha, String role) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        super(name, senha, role);
+        this.email = email;
     }
 
     public String getEmail() {
@@ -64,29 +35,8 @@ public class User implements Principal {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.salt = gerarSaltAleatorio();
-        this.senha = gerarHash(senha, salt);
-    }
-
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     @Override
-    public String getName() {
-        return getEmail();
-    }
-
     public String toString() {
-        return this.getNome() + ", " + this.getEmail();
+        return this.getName() + ", " + this.getEmail();
     }
 }

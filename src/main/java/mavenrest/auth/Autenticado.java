@@ -1,4 +1,4 @@
-package mavenrest.autenticacao;
+package mavenrest.auth;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

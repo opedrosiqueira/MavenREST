@@ -56,9 +56,9 @@ public class UserDAO {
     public void updateUser(long id, String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
         User u = em.find(User.class, id);
         u.setEmail(email);
-        u.setNome(nome);
+        u.setName(nome);
         if (senha != null && !"".equals(senha)) {
-            u.setSenha(senha);//so atualiza a senha se foi modificada
+            u.setPassword(senha);//so atualiza a senha se foi modificada
         }
     }
 }

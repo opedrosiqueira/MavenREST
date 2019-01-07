@@ -1,4 +1,4 @@
-package mavenrest.autenticacao;
+package mavenrest.auth;
 
 import java.security.Principal;
 import javax.ws.rs.core.SecurityContext;
@@ -9,24 +9,27 @@ import javax.ws.rs.core.SecurityContext;
  */
 public class AutenticacaoContext implements SecurityContext {
 
-    private final Principal p;
+    private final AutenticacaoUser au;
     private final boolean isSecure;
     private final String authenticationScheme;
 
-    public AutenticacaoContext(Principal u, boolean isSecure, String authenticationScheme) {
-        this.p = u;
+    public AutenticacaoContext(AutenticacaoUser u, boolean isSecure, String authenticationScheme) {
+        this.au = u;
         this.isSecure = isSecure;
         this.authenticationScheme = authenticationScheme;
     }
 
     @Override
     public Principal getUserPrincipal() {
-        return p;
+        return au;
     }
 
     @Override
     public boolean isUserInRole(String role) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (role == null || role.isEmpty()) {
+            return au.getRole() == null || au.getRole().isEmpty();
+        }
+        return role.equalsIgnoreCase(au.getRole());
     }
 
     @Override
