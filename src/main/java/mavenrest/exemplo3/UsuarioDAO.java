@@ -1,7 +1,6 @@
 package mavenrest.exemplo3;
 
-import authrest.AutenticacaoDAO;
-import authrest.AutenticacaoUser;
+import authrest.AuthUser;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -10,8 +9,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import authrest.AuthDAO;
 
-public class UsuarioDAO implements AutenticacaoDAO {
+public class UsuarioDAO implements AuthDAO {
 
     @PersistenceContext
     EntityManager em;
@@ -66,7 +66,7 @@ public class UsuarioDAO implements AutenticacaoDAO {
     }
 
     @Override
-    public AutenticacaoUser getSubject(String subject) {
+    public AuthUser getSubject(String subject) {
         return getUserByEmail(subject);
     }
 

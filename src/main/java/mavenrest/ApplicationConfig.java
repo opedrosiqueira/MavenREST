@@ -23,7 +23,6 @@ public class ApplicationConfig extends Application {
      * out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(authrest.AutenticacaoFiltro.class);
         resources.add(mavenrest.exemplo1.ExemploREST.class);
         resources.add(mavenrest.exemplo1.FiltroRequisicaoResposta.class);
         resources.add(mavenrest.exemplo1.FiltroSelecionado.class);

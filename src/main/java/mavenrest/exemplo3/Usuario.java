@@ -1,6 +1,6 @@
 package mavenrest.exemplo3;
 
-import authrest.AutenticacaoUser;
+import authrest.AuthUser;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import javax.persistence.Column;
@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 
 @Entity
-public class Usuario extends AutenticacaoUser {
+public class Usuario extends AuthUser {
 
     @Column(unique = true, nullable = false)
     @Email(message = "Email deve ser valido")

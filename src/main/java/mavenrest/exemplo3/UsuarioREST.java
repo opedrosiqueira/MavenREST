@@ -1,7 +1,6 @@
 package mavenrest.exemplo3;
 
-import authrest.AutenticacaoToken;
-import authrest.Autenticado;
+import authrest.AuthToken;
 import javax.inject.Inject;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -10,12 +9,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import authrest.Auth;
 
 @Path("auth")
 public class UsuarioREST {
 
     @Inject
-    AutenticacaoToken at;
+    AuthToken at;
 
     @POST
     public Response loginUser(
@@ -34,7 +34,7 @@ public class UsuarioREST {
         return "todos tem acesso a esse servico";
     }
 
-    @Autenticado
+    @Auth
     @GET
     @Path("autenticado")
     public String getAutenticado(@Context SecurityContext sc) {
@@ -44,7 +44,7 @@ public class UsuarioREST {
         return "voce esta autenticado, por isso tem acesso a esse servico";
     }
 
-    @Autenticado("admin")
+    @Auth("admin")
     @GET
     @Path("admin")
     public String getAdmin(@Context SecurityContext sc) {
@@ -54,7 +54,7 @@ public class UsuarioREST {
         return "voce eh admin, por isso tem acesso a esse servico";
     }
 
-    @Autenticado({"admin", "gerente"})
+    @Auth({"admin", "gerente"})
     @GET
     @Path("gerente")
     public String getGerente(@Context SecurityContext sc) {
