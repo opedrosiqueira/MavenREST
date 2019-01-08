@@ -1,4 +1,4 @@
-package mavenrest.user;
+package mavenrest.exemplo2;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

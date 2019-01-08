@@ -1,4 +1,4 @@
-package mavenrest.exemplo;
+package mavenrest.exemplo1;
 
 /**
  *

@@ -1,4 +1,4 @@
-package mavenrest.user;
+package mavenrest.exemplo3;
 
 import authrest.AutenticacaoUser;
 import java.security.NoSuchAlgorithmException;
@@ -8,22 +8,17 @@ import javax.persistence.Entity;
 import javax.validation.constraints.Email;
 
 @Entity
-public class User extends AutenticacaoUser {
+public class Usuario extends AutenticacaoUser {
 
     @Column(unique = true, nullable = false)
     @Email(message = "Email deve ser valido")
     private String email;
 
-    public User() {
+    public Usuario() {
     }
 
-    public User(String name, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        super(name, senha);
-        this.email = email;
-    }
-
-    public User(String name, String email, String senha, String role) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        super(name, senha, role);
+    public Usuario(String name, String email, String password, String role) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        super(name, password, role);
         this.email = email;
     }
 

@@ -1,7 +1,5 @@
-package mavenrest.user;
+package mavenrest.exemplo2;
 
-import authrest.AutenticacaoDAO;
-import authrest.AutenticacaoUser;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.List;
@@ -11,7 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-public class UserDAO implements AutenticacaoDAO {
+public class UserDAO {
 
     @PersistenceContext
     EntityManager em;
@@ -39,12 +37,13 @@ public class UserDAO implements AutenticacaoDAO {
     }
 
     public List<User> search(String termo, String valor) {
-        String q = "SELECT u FROM User u WHERE u." + termo + " = ?1";
-        Query query = em.createQuery(q);
+        Query query;
         if (termo.equals("id")) {
+            query = em.createQuery("SELECT u FROM User u WHERE u.id = ?1");
             query.setParameter(1, Long.valueOf(valor));
         } else {
-            query.setParameter(1, valor);
+            query = em.createQuery("SELECT u FROM User u WHERE u." + termo + " LIKE ?1");
+            query.setParameter(1, "%" + valor + "%");
         }
         return query.getResultList();
     }
@@ -64,8 +63,4 @@ public class UserDAO implements AutenticacaoDAO {
         }
     }
 
-    @Override
-    public AutenticacaoUser getSubject(String subject) {
-        return this.getUserByEmail(subject);
-    }
 }

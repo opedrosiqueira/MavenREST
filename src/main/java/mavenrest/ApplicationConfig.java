@@ -24,12 +24,12 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(authrest.AutenticacaoFiltro.class);
-        resources.add(mavenrest.autenticacao.UsuarioAuthREST.class);
-        resources.add(mavenrest.exemplo.ExemploREST.class);
-        resources.add(mavenrest.exemplo.FiltroRequisicaoResposta.class);
-        resources.add(mavenrest.exemplo.FiltroSelecionado.class);
-        resources.add(mavenrest.exemplo.UserProvider.class);
-        resources.add(mavenrest.user.UserREST.class);
+        resources.add(mavenrest.exemplo1.ExemploREST.class);
+        resources.add(mavenrest.exemplo1.FiltroRequisicaoResposta.class);
+        resources.add(mavenrest.exemplo1.FiltroSelecionado.class);
+        resources.add(mavenrest.exemplo1.UserProvider.class);
+        resources.add(mavenrest.exemplo2.UserREST.class);
+        resources.add(mavenrest.exemplo3.UsuarioREST.class);
     }
 
 }

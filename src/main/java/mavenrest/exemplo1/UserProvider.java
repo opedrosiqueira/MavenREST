@@ -1,4 +1,4 @@
-package mavenrest.exemplo;
+package mavenrest.exemplo1;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;

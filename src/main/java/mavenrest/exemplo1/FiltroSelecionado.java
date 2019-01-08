@@ -1,4 +1,4 @@
-package mavenrest.exemplo;
+package mavenrest.exemplo1;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;

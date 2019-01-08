@@ -1,4 +1,4 @@
-package mavenrest.autenticacao;
+package mavenrest.exemplo3;
 
 import authrest.AutenticacaoToken;
 import authrest.Autenticado;
@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 @Path("auth")
-public class UsuarioAuthREST {
+public class UsuarioREST {
 
     @Inject
     AutenticacaoToken at;
