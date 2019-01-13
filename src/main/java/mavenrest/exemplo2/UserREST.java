@@ -42,12 +42,8 @@ public class UserREST {
     public String createUser(
             @FormParam("nome") String nome,
             @FormParam("email") String email,
-            @FormParam("senha") String senha) {
-        try {
-            userDAO.createUser(nome, email, senha);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            return e.getMessage();
-        }
+            @FormParam("senha") String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        userDAO.createUser(nome, email, senha);
         return "criado com sucesso!";
     }
 
@@ -64,12 +60,8 @@ public class UserREST {
             @PathParam("id") long id,
             @FormParam("nome") String nome,
             @FormParam("email") String email,
-            @FormParam("senha") String senha) {
-        try {
-            userDAO.updateUser(id, nome, email, senha);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            return e.getMessage();
-        }
+            @FormParam("senha") String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        userDAO.updateUser(id, nome, email, senha);
         return "atualizado com sucesso!";
     }
 }

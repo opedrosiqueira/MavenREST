@@ -56,10 +56,11 @@ public class UsuarioDAO implements AuthDAO {
     }
 
     @Transactional
-    public void updateUser(long id, String nome, String email, String senha) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public void updateUser(long id, String nome, String email, String senha, String permissao) throws NoSuchAlgorithmException, InvalidKeySpecException {
         Usuario u = em.find(Usuario.class, id);
         u.setEmail(email);
         u.setName(nome);
+        u.setRole(permissao);
         if (senha != null && !"".equals(senha)) {
             u.setPassword(senha);//so atualiza a senha se foi modificada
         }

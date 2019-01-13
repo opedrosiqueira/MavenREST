@@ -184,35 +184,25 @@ public class ExemploREST {
     }
 
     /*
-     * podemos injetar informacoes de requisicao e resposta com a anotacao @Context.
-     * podemos injetar em parametros, atributos e ate em metodos
-     */
-    @Context
-    Application app;
-    @Context
-    Configuration config;
-    @Context
-    HttpHeaders headers;
-    @Context
-    Providers providers;
-    @Context
-    Request request;
-    @Context
-    ResourceContext resourceContext;
-    @Context
-    ResourceInfo resourceInfo;
-    @Context
-    SecurityContext securityContext;
-    @Context
-    UriInfo uriInfo;
-
-    /*
     curl -X GET 'http://localhost:8080/MavenREST/rest/exemplo/get'
      */
     @GET
     @Path("get")
     @FiltroSelecionadoAnotacao
-    public Response get() {
+    public Response get(
+            /*
+             * podemos injetar informacoes de requisicao e resposta com a anotacao @Context.
+             * podemos injetar em parametros, atributos e ate em metodos
+             */
+            @Context Application app,
+            @Context Configuration config,
+            @Context HttpHeaders headers,
+            @Context Providers providers,
+            @Context Request request,
+            @Context ResourceContext resourceContext,
+            @Context ResourceInfo resourceInfo,
+            @Context SecurityContext securityContext,
+            @Context UriInfo uriInfo) {
         HashMap<String, String> m = new HashMap<>();
         m.put("app.properties", app.getProperties().toString());
         m.put("config.properties", config.getProperties().toString());
