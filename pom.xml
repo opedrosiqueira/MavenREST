@@ -22,7 +22,7 @@
             <scope>provided</scope>
         </dependency>-->
         <dependency>
-            <groupId>authejb</groupId>
+            <groupId>authrest</groupId>
             <artifactId>AuthREST</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

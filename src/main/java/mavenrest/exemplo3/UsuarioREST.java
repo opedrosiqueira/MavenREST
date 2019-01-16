@@ -23,6 +23,9 @@ public class UsuarioREST {
     @Inject
     UsuarioDAO dao;
 
+    /*
+    curl -X POST 'http://localhost:8080/MavenREST/rest/auth/login' -H 'Content-Type: application/x-www-form-urlencoded' -d 'email=henrique@gmail.com&senha=fdsa'
+     */
     @POST
     @Path("login")
     public Response loginUser(
@@ -41,6 +44,9 @@ public class UsuarioREST {
         return "todos tem acesso a esse servico";
     }
 
+    /*
+    curl -X GET 'http://localhost:8080/MavenREST/rest/auth/autenticado' -H 'Authorization: Bearer <token>'
+     */
     @Auth
     @GET
     @Path("autenticado")
@@ -51,6 +57,9 @@ public class UsuarioREST {
         return "voce esta autenticado, por isso tem acesso a esse servico";
     }
 
+    /*
+    curl -X GET 'http://localhost:8080/MavenREST/rest/auth/admin' -H 'Authorization: Bearer <token>'
+     */
     @Auth("admin")
     @GET
     @Path("admin")
