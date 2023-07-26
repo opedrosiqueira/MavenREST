@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>User CRUD</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/index.css">
-    </head>
-    <body onload="listarTodos();">
-        <div>
-            <select id="termo" onchange="mudarTermo();">
-                <option selected="selected" value="id">ID</option>
-                <option value="name">Nome</option>
-                <option value="email">Email</option>
-            </select>
-            <input id="termo_valor">
-            <button id="buscar" onclick="buscar();">Buscar por ID</button>
-            <button onclick="listarTodos();">Listar todos</button>
-            <button onclick="criar()" >Criar Usuário</button>
-        </div>
-        <div id="conteudo"></div>
-        <script src="js/jquery-3.3.1.min.js"></script>
-        <script src="js/index.js"></script>
-    </body>
+
+<head>
+    <title>User CRUD</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body onload="listarTodos();">
+    <div>
+        <select id="termo" onchange="mudarTermo();">
+            <option selected="selected" value="id">ID</option>
+            <option value="name">Nome</option>
+            <option value="email">Email</option>
+        </select>
+        <input id="termo_valor">
+        <button id="buscar" onclick="buscar();">Buscar por ID</button>
+        <button onclick="listarTodos();">Listar todos</button>
+        <button onclick="criar()">Criar Usuário</button>
+    </div>
+    <div id="conteudo"></div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
+</body>
+
 </html>
